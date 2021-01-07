@@ -1,0 +1,9 @@
+/samples/*
+/outs
+/__pycache__
+images
+/my_object_detection/images_old
+/my_object_detection/images
+train
+test
+/my_object_detection/data_old

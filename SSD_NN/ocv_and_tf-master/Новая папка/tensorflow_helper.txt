@@ -1,0 +1,49 @@
+# Pretained models download
+https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+
+# install tensorflow/models
+https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/installation.md
+
+# for Windows string "export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim" not work. You will run from path models\research\slim comands "python setup.py build" and "python setup.py install"
+
+# install in anacondas
+conda install tensorflow-gpu=1.15.0
+conda install pandas
+
+
+# From tensorflow/models/
+protoc object_detection/protos/*.proto --python_out=.
+
+# Install pycocoapi for windows
+#Src https://github.com/philferriere/cocoapi
+pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
+
+# From tensorflow/models/
+export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
+
+# Generate the tfrecord from csv file by test images
+python generate_tfrecord.py --csv_input=data/test_labels.csv  --output_path=data/test.record --image_dir images/test/
+
+# Generate the tfrecord from csv file by train images
+python generate_tfrecord.py --csv_input=data/train_labels.csv  --output_path=data/train.record --image_dir images/train/
+
+
+# checkpoint in v2 should be without ".data-00000-of-00001...", only
+ssd_mobilenet_v2_coco_2018_03_29/model.ckpt
+
+# From object_detection/
+python3 legacy/train.py --logtostderr --train_dir=training/  --pipeline_config_path=training/ssd_mobilenet_v2_coco.config
+
+# For the monitoring train process run from object_detection
+tensorboard --logdir='training'
+
+# Export training check point to PB graph from object_detection
+python3 export_inference_graph.py --input_type image_tensor     --pipeline_config_path training/ssd_mobilenet_v2_coco.config     --trained_checkpoint_prefix training/model.ckpt-904     --output_directory ssd_coco_person_inference_graph
+
+# Export pbtxt file for opencv 
+python tf_text_graph_ssd.py --input ../ssd_coco_person_inference_graph/frozen_inference_graph.pb --config ../ssd_coco_person_inference_graph/pipeline.config --output ../ssd_coco_person_inference_graph/graph.pbtxt
+
+
+
+
+python3 export_inference_graph.py --input_type image_tensor     --pipeline_config_path training/ssd_mobilenet_v2_coco.config     --trained_checkpoint_prefix training/model.ckpt-1760    --output_directory ssd_coco_person_inference_graph_1760

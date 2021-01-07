@@ -1,2 +1,1 @@
-# ThermalPeopleDetection
-This a project on people detection in infrared images (videos) given by themal imagers.
+This is a project on pedestrian detection in thermal images
